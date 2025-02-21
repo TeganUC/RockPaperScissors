@@ -9,7 +9,7 @@ import java.util.Random;
  */
 public class RockPaperScissorsFrame extends JFrame {
     JPanel mainPnl, titlePnl, displayPnl, cmdPnl;
-    JLabel titleLbl, compWinsLbl, userWinsLbl, tiesLbl;
+    JLabel titleLbl, compWinsLbl, userWinsLbl, tiesLbl, rockLbl, paperLbl, scissorsLbl;
     ImageIcon rockImg, paperImg, scissorsImg, xImg;
     JScrollPane scroller;
     JTextArea gameTA;
@@ -21,6 +21,9 @@ public class RockPaperScissorsFrame extends JFrame {
     int userWins = 0;
     int ties = 0;
     int strat = 1;
+    int rockCalled = 0;
+    int paperCalled = 0;
+    int scissorsCalled = 0;
 
     /**
      * Rock paper scissors constructor
@@ -60,6 +63,7 @@ public class RockPaperScissorsFrame extends JFrame {
         displayPnl = new JPanel();
 
         JPanel statsPnl = new JPanel();
+        JPanel turnsPnl = new JPanel();
 
         userWinsLbl = new JLabel("Wins: " + userWins);
         compWinsLbl = new JLabel("Losses: " + compWins);
@@ -68,6 +72,16 @@ public class RockPaperScissorsFrame extends JFrame {
         statsPnl.add(compWinsLbl);
         statsPnl.add(userWinsLbl);
         statsPnl.add(tiesLbl);
+
+        rockLbl = new JLabel("Rock: " + rockCalled);
+        paperLbl = new JLabel("Paper:  " + paperCalled);
+        scissorsLbl = new JLabel("Scissors: " + scissorsCalled);
+
+        turnsPnl.add(rockLbl);
+        turnsPnl.add(paperLbl);
+        turnsPnl.add(scissorsLbl);
+
+        displayPnl.add(turnsPnl);
 
         displayPnl.add(statsPnl);
 
@@ -146,18 +160,17 @@ public class RockPaperScissorsFrame extends JFrame {
 
         String compTurn = "";
 
-        // Variables for each time each move is called by the player
-        int rockCalled = 0;
-        int paperCalled = 0;
-        int scissorsCalled = 0;
-
         // Stores moves made by player in above variables
         if(turn.equals("R")){
-            rockCalled++;
+            rockCalled += 1;
+            rockLbl.setText("Rock: " + rockCalled);
         }else if(turn.equals("P")){
-            paperCalled++;
+            paperCalled += 1;
+            paperLbl.setText("Paper: " + paperCalled);
         }else if(turn.equals("S")){
-            scissorsCalled++;
+            scissorsCalled += 1;
+            scissorsLbl.setText("Scissors: " + scissorsCalled);
+
         }
 
         /**
@@ -177,8 +190,8 @@ public class RockPaperScissorsFrame extends JFrame {
 
         // Strategy 1 - Random
         if(strat == 1){
-
             int rand = rnd.nextInt(3) + 1;
+
             if(rand == 1){
                 compTurn = "R";
             }else if(rand == 2){
@@ -186,8 +199,6 @@ public class RockPaperScissorsFrame extends JFrame {
             }else if(rand == 3){
                 compTurn = "S";
             }
-
-            strat = rnd.nextInt(6) + 1;
 
         //Strategy 2 - Most Used
         }else if(strat == 2){
@@ -209,8 +220,6 @@ public class RockPaperScissorsFrame extends JFrame {
                 }
             }
 
-            strat = rnd.nextInt(6) + 1;
-
         // Strategy 3 - Least Used
         }else if(strat == 3){
 
@@ -231,8 +240,6 @@ public class RockPaperScissorsFrame extends JFrame {
                 }
             }
 
-            strat = rnd.nextInt(6) + 1;
-
         // Strategy 4 - Cheating Computer
         }else if(strat == 4){
 
@@ -243,8 +250,6 @@ public class RockPaperScissorsFrame extends JFrame {
             }else if(turn.equals("S")){
                 compTurn = "R";
             }
-
-            strat = rnd.nextInt(6) + 1;
 
         // Strategy 5 - Playing Nice
         }else if(strat == 5){
@@ -257,15 +262,48 @@ public class RockPaperScissorsFrame extends JFrame {
                 compTurn = "P";
             }
 
-            strat = rnd.nextInt(6) + 1;
-
         // Strategy 6 - It's Just Gonna Tie
         }else if(strat == 6){
 
             compTurn = turn;
 
-            strat = rnd.nextInt(6) + 1;
         }
+
+        // Prints to the screen the strategy used in a roundabout way
+        if (strat == 1){
+            gameTA.append("I left it up to luck today." + "\n");
+        }else if(strat == 2){
+            if(rockCalled > paperCalled && rockCalled > scissorsCalled){
+                gameTA.append("You seem to use rock a lot." + "\n");
+            }else if(paperCalled > rockCalled && paperCalled > scissorsCalled){
+                gameTA.append("You seem to use paper a lot." + "\n");
+            }else if(scissorsCalled > rockCalled && scissorsCalled > paperCalled){
+                gameTA.append("You seem to use scissors a lot." + "\n");
+            }else{
+                gameTA.append("I couldn't figure out what you used most, so I resorted to luck." + "\n");
+            }
+
+        }else if(strat == 3){
+            if(rockCalled < paperCalled && rockCalled < scissorsCalled){
+                gameTA.append("You don't seem to use rock much." + "\n");
+            }else if(paperCalled < rockCalled && paperCalled < scissorsCalled){
+                gameTA.append("You don't seem to use paper much." + "\n");
+            }else if(scissorsCalled < rockCalled && scissorsCalled < paperCalled){
+                gameTA.append("You don't seem to use scissors much." + "\n");
+            }else{
+                gameTA.append("I couldn't figure out what you used least, so I resorted to luck." + "\n");
+            }
+        }else if(strat == 4){
+            gameTA.append("Ha ha. You didn't stand a chance." + "\n");
+        }else if(strat == 5){
+            gameTA.append("I went easy on you." + "\n");
+        }else if (strat == 6){
+            gameTA.append("Who on Earth would cheat the game to force a tie? I would. That's who." + "\n");
+        }
+
+        // Randomizes the next strategy
+        strat = rnd.nextInt(6) + 1;
+
 
         // Return Statements based on results
         if(turn.equals(compTurn)){
