@@ -44,7 +44,7 @@ public class RockPaperScissorsFrame extends JFrame {
     }
 
     /**
-     * Rock paper scissors constructor
+     * Title panel constructor
      * No parameters, returns nothing
      */
     private void createTitlePanel(){
@@ -56,7 +56,7 @@ public class RockPaperScissorsFrame extends JFrame {
     }
 
     /**
-     * Rock paper scissors constructor
+     * Display panel constructor
      * No parameters, returns nothing
      */
     private void createDisplayPanel() {
@@ -92,7 +92,7 @@ public class RockPaperScissorsFrame extends JFrame {
     }
 
     /**
-     * Rock paper scissors constructor
+     * Control panel constructor
      * No parameters, returns nothing
      */
     private void createControlPanel() {
